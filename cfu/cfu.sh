@@ -3,6 +3,7 @@
 ##############################################################
 # Common Variables
 #
+cfu_dir="/etc/cfu"
 cfu_api_link="https://api.cloudflare.com/client/v4/zones"
 #
 ##############################################################
@@ -14,7 +15,7 @@ function cfu_startup {
   #
   # Get Current IP
   #
-  cfu_file="/etc/cfu/cfu_previous_ip-$cfu_dns_entry.txt"
+  cfu_file="$cfu_dir/cfu_previous_ip-$cfu_dns_entry.txt"
   echo -e "`date +"%b %d %T"` Started\t\t\t: `date +"%b %d %Y %T"`"
   if [ "$cfs_dns_record_type" == "A" ]; then
     cfu_cur_ip=$(curl -s -4 "http://icanhazip.com")
@@ -88,11 +89,12 @@ function cfu_update_dns_entry {
 #
 # Get the configuration files - then process them
 #
-cfu_config_files=$(ls -A1 config/)
+cd $cfu_dir
+cfu_config_files=$(ls -A1 $cfu_dir/config/)
 for cfu_conf_file in $cfu_config_files; do
   echo -e "`date +"%b %d %T"` ------------------------------------------------------------"
   echo -e "`date +"%b %d %T"` Processing Config File\t: $cfu_conf_file"
-  source config/$cfu_conf_file
+  source $cfu_dir/config/$cfu_conf_file
   cfu_startup
   cfu_get_zone_id
   cfu_get_record_id
