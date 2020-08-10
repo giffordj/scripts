@@ -1,0 +1,2 @@
+  */15 * * * * /etc/cfu/cfu.sh >> /var/log/cfu.log
+  @reboot sleep 300 && /etc/cfu/cfu.sh >> /var/log/cfu.log
